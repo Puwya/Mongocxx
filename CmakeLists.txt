@@ -6,10 +6,9 @@ set(CMAKE_BUILD_TYPE Debug)
 project(main)
 
 add_executable(${PROJECT_NAME} src/main.cpp)
-target_include_directories(${PROJECT_NAME} PUBLIC /include)
 
-# Letting CMake find library
-# find_library(${LIB_NAME} ${LIB_TO_FIND} PATHS /tmp/customPath)
-# User explicitly finding library
-# target_include_directories(${PROJECT_NAME} PUBLIC ${LIB_HEADER_FILES})
-# target_link_libraries(${PROJECT_NAME} PUBLIC ${LIB_TO_INCLUDE})
+find_library(mongocxx mongocxx.3.6.7 PATHS /usr/local/lib)
+find_library(bsoncxx bsoncxx.3.6.7 PATHS /usr/local/lib)
+target_include_directories(${PROJECT_NAME} PUBLIC /include
+                           /usr/local/include/bsoncxx/v_noabi 
+                           /usr/local/include/mongocxx/v_noabi)
