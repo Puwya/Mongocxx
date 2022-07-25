@@ -24,12 +24,16 @@ class API {
         client_(mongocxx::client(uri_)),
         db_(client_[DATABASE]) {}
 
+  // Post Character into database LOCAL for now
   bool PostCharacter(
       const std::string &character_name, const CharacterSchema::Size &size,
       const int16_t &wins) {
+    // Grab collection
     mongocxx::collection collection = db_[COLLECTION_NAME];
+    // This is like mongoose schema
     auto builder = bsoncxx::builder::stream::document{};
 
+    // Building schema and placing into document
     bsoncxx::document::value document =
         builder << "character" << character_name << "size"
                 << CharacterSchema::SizeToString.find(size)->second << "wins" << wins
@@ -43,19 +47,24 @@ class API {
     return false;
   }
 
+  // Update wins
   bool PatchWins(const std::string &character_id) {
     mongocxx::collection collection = db_[COLLECTION_NAME];
     auto builder = bsoncxx::builder::stream::document{};
+    // Transforming string into oid
     bsoncxx::oid document_id(character_id);
 
+    // Find document with oid variable
     bsoncxx::document::value query_document =
         builder << "_id" << document_id << bsoncxx::builder::stream::finalize;
 
+    // Kinda like printf using $inc as a field to increase wins by 1
     bsoncxx::document::value document =
         builder << "$inc" << bsoncxx::builder::stream::open_document << "wins" << 1
                 << bsoncxx::builder::stream::close_document
                 << bsoncxx::builder::stream::finalize;
 
+    // Storing result of whether or now it got updated
     bsoncxx::stdx::optional<mongocxx::result::update> result =
         collection.update_one(query_document.view(), document.view());
 
