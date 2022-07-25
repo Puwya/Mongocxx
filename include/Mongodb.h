@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "CharacterSize.h"
+#include "CharacterSchema.h"
 #include "bsoncxx/builder/stream/document.hpp"
 #include "bsoncxx/json.hpp"
 #include "bsoncxx/oid.hpp"
@@ -25,13 +25,14 @@ class API {
         db_(client_[DATABASE]) {}
 
   bool PostCharacter(
-      const std::string &character_name, const CharacterSize &size, const int16_t &wins) {
+      const std::string &character_name, const CharacterSchema::Size &size,
+      const int16_t &wins) {
     mongocxx::collection collection = db_[COLLECTION_NAME];
     auto builder = bsoncxx::builder::stream::document{};
 
     bsoncxx::document::value document =
         builder << "character" << character_name << "size"
-                << characterSizeToString.find(size)->second << "wins" << wins
+                << CharacterSchema::SizeToString.find(size)->second << "wins" << wins
                 << bsoncxx::builder::stream::finalize;
     try {
       collection.insert_one(document.view());

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../include/CharacterSize.h"
+#include "../include/CharacterSchema.h"
 #include "../include/Mongodb.h"
 #include "mongocxx/instance.hpp"
 
