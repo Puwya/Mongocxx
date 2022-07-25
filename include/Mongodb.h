@@ -64,7 +64,23 @@ class API {
     }
     return false;
   }
-  bool DeleteCharacter(const std::string &character_id) { return true; }
+  bool DeleteCharacter(const std::string &character_id) {
+    mongocxx::collection collection = db_[COLLECTION_NAME];
+    bsoncxx::v_noabi::builder::stream::document builder =
+        bsoncxx::builder::stream::document{};
+    bsoncxx::oid document_id(character_id);
+
+    bsoncxx::document::value query_document =
+        builder << "_id" << document_id << bsoncxx::builder::stream::finalize;
+
+    bsoncxx::stdx::optional<mongocxx::result::delete_result> result =
+        collection.delete_one(query_document.view());
+
+    if (result) {
+      return result->deleted_count() == 1;
+    }
+    return false;
+  }
 
  private:
   mongocxx::uri uri_;
