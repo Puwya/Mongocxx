@@ -73,6 +73,7 @@ class API {
     }
     return false;
   }
+
   bool DeleteCharacter(const std::string &character_id) {
     mongocxx::collection collection = db_[COLLECTION_NAME];
     bsoncxx::v_noabi::builder::stream::document builder =
