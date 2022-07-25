@@ -42,7 +42,27 @@ class API {
     return false;
   }
 
-  bool PatchWins(const std::string &character_id) { return true; }
+  bool PatchWins(const std::string &character_id) {
+    mongocxx::collection collection = db_[COLLECTION_NAME];
+    auto builder = bsoncxx::builder::stream::document{};
+    bsoncxx::oid document_id(character_id);
+
+    bsoncxx::document::value query_document =
+        builder << "_id" << document_id << bsoncxx::builder::stream::finalize;
+
+    bsoncxx::document::value document =
+        builder << "$inc" << bsoncxx::builder::stream::open_document << "wins" << 1
+                << bsoncxx::builder::stream::close_document
+                << bsoncxx::builder::stream::finalize;
+
+    bsoncxx::stdx::optional<mongocxx::result::update> result =
+        collection.update_one(query_document.view(), document.view());
+
+    if (result) {
+      return result->modified_count() == 1;
+    }
+    return false;
+  }
   bool DeleteCharacter(const std::string &character_id) { return true; }
 
  private:

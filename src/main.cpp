@@ -8,7 +8,6 @@ int main() {
   mongocxx::instance instance;
   server::API api;
 
-  api.PostCharacter("Donkey Kong", server::CharacterSize::Large, 0);
-  std::cout << "Hello World!";
+  api.PatchWins("62de180f31de596774050941");
   return 0;
 }
