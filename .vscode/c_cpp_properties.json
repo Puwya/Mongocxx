@@ -5,7 +5,8 @@
   "configurations": [
     { 
       "name": "mac",
-      "includePath": ["${myDefaultIncludePath}"]
+      "includePath": ["${myDefaultIncludePath}", "/usr/local/include/bsoncxx/v_noabi",
+                      "/usr/local/include/mongocxx/v_noabi"]
     }
   ],
   "version": 4
