@@ -60,7 +60,7 @@ class API {
 
     // Kinda like printf using $inc as a field to increase wins by 1
     bsoncxx::document::value document =
-        builder << "$inc" << bsoncxx::builder::stream::open_document << "wins" << 1
+        builder << "$inc" << bsoncxx::builder::stream::open_document << "wins" << -1
                 << bsoncxx::builder::stream::close_document
                 << bsoncxx::builder::stream::finalize;
 

@@ -8,6 +8,6 @@ int main() {
   mongocxx::instance instance;
   server::API api;
 
-  api.DeleteCharacter("62de1b22e9f58429e60d9cb2");
+  api.PatchWins("62e1abd35b528f48bf071941");
   return 0;
 }
